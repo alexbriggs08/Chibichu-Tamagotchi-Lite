@@ -58,8 +58,8 @@ fi
 build_dir="build/$version"
 mkdir -p "$build_dir"
 
-# Compile
-g++ src/main.cpp -o "$build_dir/main"
+# Compile with C++26 and warnings
+g++ -std=c++26 -Wall -Wextra src/main.cpp -o "$build_dir/main"
 
 # Check success
 if [ $? -eq 0 ]; then

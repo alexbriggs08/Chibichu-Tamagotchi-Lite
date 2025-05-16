@@ -1,0 +1,4 @@
+petName=Mini
+hunger=88
+happiness=99
+energy=88
