@@ -129,6 +129,30 @@ ChibichuTamagotchi/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/ChibichuTamagotchi.dir/build.make CMakeFiles/ChibichuTamagotchi.dir/build
 .PHONY : ChibichuTamagotchi/fast
 
+src/NeedsSystem.o: src/NeedsSystem.cpp.o
+.PHONY : src/NeedsSystem.o
+
+# target to build an object file
+src/NeedsSystem.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ChibichuTamagotchi.dir/build.make CMakeFiles/ChibichuTamagotchi.dir/src/NeedsSystem.cpp.o
+.PHONY : src/NeedsSystem.cpp.o
+
+src/NeedsSystem.i: src/NeedsSystem.cpp.i
+.PHONY : src/NeedsSystem.i
+
+# target to preprocess a source file
+src/NeedsSystem.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ChibichuTamagotchi.dir/build.make CMakeFiles/ChibichuTamagotchi.dir/src/NeedsSystem.cpp.i
+.PHONY : src/NeedsSystem.cpp.i
+
+src/NeedsSystem.s: src/NeedsSystem.cpp.s
+.PHONY : src/NeedsSystem.s
+
+# target to generate assembly for a file
+src/NeedsSystem.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ChibichuTamagotchi.dir/build.make CMakeFiles/ChibichuTamagotchi.dir/src/NeedsSystem.cpp.s
+.PHONY : src/NeedsSystem.cpp.s
+
 src/main.o: src/main.cpp.o
 .PHONY : src/main.o
 
@@ -162,6 +186,9 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... ChibichuTamagotchi"
+	@echo "... src/NeedsSystem.o"
+	@echo "... src/NeedsSystem.i"
+	@echo "... src/NeedsSystem.s"
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"

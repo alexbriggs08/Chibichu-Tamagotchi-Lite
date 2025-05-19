@@ -1,4 +1,6 @@
 file(REMOVE_RECURSE
+  "CMakeFiles/ChibichuTamagotchi.dir/src/NeedsSystem.cpp.o"
+  "CMakeFiles/ChibichuTamagotchi.dir/src/NeedsSystem.cpp.o.d"
   "CMakeFiles/ChibichuTamagotchi.dir/src/main.cpp.o"
   "CMakeFiles/ChibichuTamagotchi.dir/src/main.cpp.o.d"
   "ChibichuTamagotchi"

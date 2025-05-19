@@ -8,6 +8,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
+  "/Users/alex/Desktop/dev/C++/Real Projects/Chibichu - Tamagotchi Lite/src/NeedsSystem.cpp" "CMakeFiles/ChibichuTamagotchi.dir/src/NeedsSystem.cpp.o" "gcc" "CMakeFiles/ChibichuTamagotchi.dir/src/NeedsSystem.cpp.o.d"
   "/Users/alex/Desktop/dev/C++/Real Projects/Chibichu - Tamagotchi Lite/src/main.cpp" "CMakeFiles/ChibichuTamagotchi.dir/src/main.cpp.o" "gcc" "CMakeFiles/ChibichuTamagotchi.dir/src/main.cpp.o.d"
   )
 
