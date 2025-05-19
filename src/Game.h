@@ -1,16 +1,17 @@
 #ifndef GAME_H
 #define GAME_H
 
-#include "Pet.h"  // So the Game class can use Pet
+#include "Pet.h"
 
 class Game {
 public:
-    Game();         // Constructor
-    void start();   // Starts the game loop
+    Game();
+    void start();
+    void displayStatus();
 
 private:
-    Pet pet{};      // The pet instance
-    bool isRunning{ false };  // Game loop flag
+    Pet pet{};
+    bool isRunning{ false };
 };
 
-#endif // GAME_H
+#endif

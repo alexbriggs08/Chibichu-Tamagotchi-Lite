@@ -1,21 +1,23 @@
 #include "Game.h"
+#include <iostream>
 
-// Constructor implementation
-Game::Game() {
-    // Initialize your game state here if needed
-    // For now, you can leave it empty or set isRunning to true here
+void Game::displayStatus() {
+    std::cout << "---- Pet Status ----\n";
+    std::cout << "Hunger: " << pet.hunger << "\n";
+    std::cout << "Happiness: " << pet.happiness << "\n";
+    std::cout << "Health: " << pet.health << "\n";
+    std::cout << "Age: " << pet.age << "\n";
+    std::cout << "Asleep: " << (pet.asleep ? "Yes" : "No") << "\n";
+    std::cout << "---------------------\n";
 }
 
-// start() method implementation
+Game::Game() {
+    // ...
+}
+
 void Game::start() {
-    // Set your game running flag to true to start the loop
-
-    // While the game is running
-        // - Process player input
-        // - Update pet status (hunger, happiness, age, sleep)
-        // - Render ASCII pet animation and menus
-        // - Check for game over conditions (health or hunger zero)
-        // - Possibly delay or wait based on real time or turns
-
-    // When the loop ends, clean up or show end message
+    isRunning = true;
+    while (isRunning) {
+        displayStatus(); // OK now because it's defined above
+    }
 }
