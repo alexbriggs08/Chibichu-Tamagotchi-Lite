@@ -59,7 +59,8 @@ build_dir="build/$version"
 mkdir -p "$build_dir"
 
 # Compile
-g++ src/main.cpp -o "$build_dir/main"
+g++ -std=c++23 src/*.cpp -o "$build_dir/main"
+
 
 # Check success
 if [ $? -eq 0 ]; then
