@@ -12,6 +12,9 @@ private:
     void displayStatus() const;
     void displayMenu() const;
     int getUserChoice(int min, int max) const;
+    void checkForDeath();
+    void passTime();
+    void restart();
 
     // Game actions
     void feedPet();
