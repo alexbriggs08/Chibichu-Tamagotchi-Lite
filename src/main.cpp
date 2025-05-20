@@ -1,5 +1,6 @@
 #include "raylib.h"
 #include "NeedsSystem.h"
+#include <cstdio>
 
 int main() {
     const int screenWidth = 800;
@@ -15,25 +16,33 @@ int main() {
     Needs needs;
     InitNeeds(needs);
 
+    float needsTimer = 0.0f;
+    const float updateInterval = 1.0f;
+
     while (!WindowShouldClose()) {
-        // Start button click
+        float deltaTime = GetFrameTime();
+        needsTimer += deltaTime;
+
+        // Update needs only if game started and interval passed
+        if (gameStarted && needsTimer >= updateInterval) {
+            UpdateNeeds(needs);
+            needsTimer = 0.0f;
+            printf("Hunger: %d\n", needs.hunger);
+        }
+
+        // Input handling: start game
         if (!gameStarted &&
             CheckCollisionPointRec(GetMousePosition(), startButton) &&
             IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
             gameStarted = true;
         }
 
-        // Stop button click (quit)
+        // Input handling: stop game (close window)
         if (!gameStarted &&
             CheckCollisionPointRec(GetMousePosition(), stopButton) &&
             IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
             CloseWindow();
             break;
-        }
-
-        if (gameStarted) {
-            UpdateNeeds(needs);
-            DrawNeeds(needs);
         }
 
         BeginDrawing();
@@ -47,6 +56,7 @@ int main() {
             DrawText("STOP", stopButton.x + 60, stopButton.y + 15, 20, BLACK);
         }
         else {
+            DrawNeeds(needs);
             DrawText("Game Started!", screenWidth / 2 - 80, screenHeight / 2 - 10, 20, DARKGRAY);
         }
 
