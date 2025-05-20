@@ -2,9 +2,10 @@
 #include <cmath>
 
 void InitNeeds(Needs& needs) {
-    needs.hunger = 100;
-    needs.happiness = 100;
-    needs.cleanliness = 100;
+    needs.hunger = 50;
+    needs.happiness = 50;
+    needs.cleanliness = 50;
+    needs.isSleeping = { false };
 }
 
 void UpdateNeeds(Needs& needs) {
