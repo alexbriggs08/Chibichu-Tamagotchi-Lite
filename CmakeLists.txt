@@ -2,7 +2,11 @@ cmake_minimum_required(VERSION 3.10)
 project(Chibichu)
 
 set(CMAKE_CXX_STANDARD 17)
-set(SOURCE_FILES src/main.cpp src/NeedsSystem.cpp)
+set(SOURCE_FILES 
+    src/main.cpp 
+    src/NeedsSystem.cpp
+    src/Animations.cpp)
+
 
 # Adjust this path if raylib is installed somewhere else
 set(RAYLIB_PATH /usr/local)

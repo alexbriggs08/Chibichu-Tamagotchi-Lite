@@ -1,5 +1,6 @@
 #include "raylib.h"
 #include "NeedsSystem.h"
+#include "Animations.h"
 #include <cstdio>
 
 // function calling
@@ -37,6 +38,9 @@ int main() {
     while (!WindowShouldClose()) {
         float deltaTime = GetFrameTime();
         needsTimer += deltaTime;
+
+        int frame = static_cast<int>(totalElapsedTime * 2) % 3; // 2 frames per second
+        const char* frameStr = getPetFrame(frame);
 
         // creates the time of day
         totalElapsedTime += deltaTime;
@@ -90,6 +94,9 @@ int main() {
             DrawText("STOP", stopButton.x + 60, stopButton.y + 15, 20, BLACK);
         }
         else {
+            // pet animations
+            DrawText(frameStr, 100, 200, 20, BLACK);
+
             // Information: 
             DrawNeeds(needs); // will draw the pets needs
             DrawText(needs.isSleeping ? "Zzz..." : "Awake", 50, 140, 20, needs.isSleeping ? DARKBLUE : DARKGREEN); // will draw the pets sleeping stat

@@ -129,6 +129,30 @@ Chibichu/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Chibichu.dir/build.make CMakeFiles/Chibichu.dir/build
 .PHONY : Chibichu/fast
 
+src/Animations.o: src/Animations.cpp.o
+.PHONY : src/Animations.o
+
+# target to build an object file
+src/Animations.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Chibichu.dir/build.make CMakeFiles/Chibichu.dir/src/Animations.cpp.o
+.PHONY : src/Animations.cpp.o
+
+src/Animations.i: src/Animations.cpp.i
+.PHONY : src/Animations.i
+
+# target to preprocess a source file
+src/Animations.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Chibichu.dir/build.make CMakeFiles/Chibichu.dir/src/Animations.cpp.i
+.PHONY : src/Animations.cpp.i
+
+src/Animations.s: src/Animations.cpp.s
+.PHONY : src/Animations.s
+
+# target to generate assembly for a file
+src/Animations.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Chibichu.dir/build.make CMakeFiles/Chibichu.dir/src/Animations.cpp.s
+.PHONY : src/Animations.cpp.s
+
 src/NeedsSystem.o: src/NeedsSystem.cpp.o
 .PHONY : src/NeedsSystem.o
 
@@ -186,6 +210,9 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... Chibichu"
+	@echo "... src/Animations.o"
+	@echo "... src/Animations.i"
+	@echo "... src/Animations.s"
 	@echo "... src/NeedsSystem.o"
 	@echo "... src/NeedsSystem.i"
 	@echo "... src/NeedsSystem.s"
