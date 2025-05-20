@@ -6,6 +6,8 @@
 struct Needs {
     int hunger;
     int happiness;
+    int cleanliness;
+    bool isSleeping;
 };
 
 // Functions declarations...

@@ -1,14 +1,15 @@
 cmake_minimum_required(VERSION 3.10)
-project(ChibichuTamagotchi)
+project(Chibichu)
 
-set(CMAKE_CXX_STANDARD 11)  # ✅ Use at least C++11
+set(CMAKE_CXX_STANDARD 17)
+set(SOURCE_FILES src/main.cpp src/NeedsSystem.cpp)
 
+# Adjust this path if raylib is installed somewhere else
+set(RAYLIB_PATH /usr/local)
+
+# Include raylib
 find_package(raylib REQUIRED)
 
-add_executable(ChibichuTamagotchi
-    src/main.cpp
-    src/NeedsSystem.cpp
-)
+add_executable(Chibichu ${SOURCE_FILES})
 
-
-target_link_libraries(ChibichuTamagotchi raylib)
+target_link_libraries(Chibichu raylib)

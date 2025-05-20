@@ -4,6 +4,7 @@
 void InitNeeds(Needs& needs) {
     needs.hunger = 100;
     needs.happiness = 100;
+    needs.cleanliness = 100;
 }
 
 void UpdateNeeds(Needs& needs) {

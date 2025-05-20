@@ -146,7 +146,7 @@ CMAKE_PROJECT_DESCRIPTION:STATIC=
 CMAKE_PROJECT_HOMEPAGE_URL:STATIC=
 
 //Value Computed by CMake
-CMAKE_PROJECT_NAME:STATIC=ChibichuTamagotchi
+CMAKE_PROJECT_NAME:STATIC=Chibichu
 
 //Path to a program.
 CMAKE_RANLIB:FILEPATH=/usr/bin/ranlib
@@ -214,13 +214,13 @@ CMAKE_TAPI:FILEPATH=/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeD
 CMAKE_VERBOSE_MAKEFILE:BOOL=FALSE
 
 //Value Computed by CMake
-ChibichuTamagotchi_BINARY_DIR:STATIC=/Users/alex/Desktop/dev/C++/Real Projects/Chibichu - Tamagotchi Lite/build
+Chibichu_BINARY_DIR:STATIC=/Users/alex/Desktop/dev/C++/Real Projects/Chibichu - Tamagotchi Lite/build
 
 //Value Computed by CMake
-ChibichuTamagotchi_IS_TOP_LEVEL:STATIC=ON
+Chibichu_IS_TOP_LEVEL:STATIC=ON
 
 //Value Computed by CMake
-ChibichuTamagotchi_SOURCE_DIR:STATIC=/Users/alex/Desktop/dev/C++/Real Projects/Chibichu - Tamagotchi Lite
+Chibichu_SOURCE_DIR:STATIC=/Users/alex/Desktop/dev/C++/Real Projects/Chibichu - Tamagotchi Lite
 
 //Arguments to supply to pkg-config
 PKG_CONFIG_ARGN:STRING=
