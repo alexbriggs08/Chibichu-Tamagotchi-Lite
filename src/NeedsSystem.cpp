@@ -10,11 +10,14 @@ void InitNeeds(Needs& needs) {
 void UpdateNeeds(Needs& needs) {
     needs.hunger -= 1;
     if (needs.hunger < 0) needs.hunger = 0;
+    needs.cleanliness -= 1;
+    if (needs.cleanliness < 0) needs.cleanliness -= 1;
 
     if (needs.hunger <= 20) {
         needs.happiness -= 1;
         if (needs.happiness < 0) needs.happiness = 0;
     }
+
 }
 
 
