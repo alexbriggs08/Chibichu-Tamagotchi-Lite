@@ -1,4 +1,5 @@
 #include "NeedsSystem.h"
+#include <cmath>
 
 void InitNeeds(Needs& needs) {
     needs.hunger = 100;
@@ -16,11 +17,13 @@ void UpdateNeeds(Needs& needs) {
 }
 
 
+
+
 void DrawNeeds(const Needs& needs) {
     DrawText("Hunger:", 50, 50, 20, BLACK);
 
     int totalCircles = 5;
-    int filledCircles = needs.hunger / (100 / totalCircles);  // = needs.hunger / 20
+    int filledCircles = (int)ceil((needs.hunger / 100.0f) * totalCircles);
 
     int circleRadius = 15;
     int spacing = 10;

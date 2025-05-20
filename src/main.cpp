@@ -12,12 +12,13 @@ int main() {
     bool gameStarted = false;
     Rectangle startButton = { screenWidth / 2 - 100, screenHeight / 2 - 25, 200, 50 };
     Rectangle stopButton = { screenWidth / 2 - 100, screenHeight / 2 + 50, 200, 50 };
+    Rectangle feedButton = { 50, 200, 150, 40 }; // 50 = x, 200 = y, 150 = width, 40 = height
 
     Needs needs;
     InitNeeds(needs);
 
     float needsTimer = 0.0f;
-    const float updateInterval = 1.0f;
+    const double updateInterval = 3.5f;
 
     while (!WindowShouldClose()) {
         float deltaTime = GetFrameTime();
@@ -58,6 +59,14 @@ int main() {
         else {
             DrawNeeds(needs);
             DrawText("Game Started!", screenWidth / 2 - 80, screenHeight / 2 - 10, 20, DARKGRAY);
+            DrawRectangleRec(feedButton, LIGHTGRAY);
+            DrawText("Feed", feedButton.x + 50, feedButton.y + 10, 20, BLACK);
+            if (CheckCollisionPointRec(GetMousePosition(), feedButton) &&
+                IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+                needs.hunger += 10; // increases the hunger stat
+                if (needs.hunger > 100) needs.hunger = 100; // clamp to max
+            }
+
         }
 
         EndDrawing();
