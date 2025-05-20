@@ -2,6 +2,7 @@
 #include "NeedsSystem.h"
 #include "Animations.h"
 #include <cstdio>
+#include <cmath>
 
 // function calling
 const char* getFormattedTime(float timeOfDay, float fullDayDuration);
@@ -34,30 +35,35 @@ int main() {
     float totalElapsedTime = 0.0f;
     const float fullDayDuration = 120.0f; // sets the full day duration (in game) to 2 minutes
 
+    // for animating pet actions
+    PetState currentState = IDLE;
+    float stateTimer = 0.0f;
+    const float actionDuration = 1.5f;
+
     // Game Loop
     while (!WindowShouldClose()) {
         float deltaTime = GetFrameTime();
         needsTimer += deltaTime;
-
-        int frame = static_cast<int>(totalElapsedTime * 2) % 3; // 2 frames per second
-        const char* frameStr = getPetFrame(frame);
-
-        // creates the time of day
         totalElapsedTime += deltaTime;
+        stateTimer += deltaTime;
 
+        int frame = static_cast<int>(totalElapsedTime * 2) % 2; // 2 frames per second
 
+        // time of day logic
         int currentDay = static_cast<int>(totalElapsedTime / fullDayDuration) + 1;
-
-        float timeOfDay = 0.0f;
-
-        timeOfDay += deltaTime;
-        if (timeOfDay > fullDayDuration) timeOfDay = 0.0f;
-
+        float timeOfDay = fmod(totalElapsedTime, fullDayDuration);
         int currentHour = getGameHour(timeOfDay, fullDayDuration);
 
         needs.isSleeping = (currentHour >= 22 || currentHour < 6);
+        if (needs.isSleeping) {
+            currentState = SLEEPING;
+        }
+        else if (currentState != IDLE && stateTimer >= actionDuration) {
+            currentState = IDLE;
+            stateTimer = 0.0f;
+        }
 
-
+        const char* frameStr = getPetFrame(currentState, frame);
 
         // Update needs only if game started and interval passed
         if (gameStarted && needsTimer >= updateInterval) {
@@ -108,19 +114,23 @@ int main() {
             DrawText("Clean", cleanButton.x + 50, cleanButton.y + 10, 20, BLACK);
             DrawText(TextFormat("Cleanliness: %d", needs.cleanliness), 50, 100, 20, DARKGRAY); // displays the clenliness stat
 
-
             // Buttons:
             if (CheckCollisionPointRec(GetMousePosition(), feedButton) && // handles the feed button input
                 IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
                 needs.hunger += 10; // increases the hunger stat
                 if (needs.hunger > 100) needs.hunger = 100; // clamp to max
+
+                currentState = EATING;
+                stateTimer = 0.0f;
             }
             if (CheckCollisionPointRec(GetMousePosition(), cleanButton) && // handles the clean button input
                 IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
                 needs.cleanliness += 10; // Increase cleanliness
                 if (needs.cleanliness > 100) needs.cleanliness = 100; // Clamp to max
-            }
 
+                currentState = CLEANING;
+                stateTimer = 0.0f;
+            }
         }
         // ends the drawing of the screen
         EndDrawing();
@@ -130,7 +140,6 @@ int main() {
 
     return 0;
 }
-
 
 // Gets the current in game hour from 0 - 23 
 int getGameHour(float timeOfDay, float fullDayDuration) {
@@ -147,4 +156,3 @@ const char* getFormattedTime(float timeOfDay, float fullDayDuration) {
     snprintf(buffer, sizeof(buffer), "%02d:%02d", hours, minutes);
     return buffer;
 }
-
