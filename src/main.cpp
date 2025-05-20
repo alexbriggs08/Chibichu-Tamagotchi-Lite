@@ -22,7 +22,7 @@ int main() {
     Rectangle startButton = { screenWidth / 2 - 100, screenHeight / 2 - 25, 200, 50 };
     Rectangle stopButton = { screenWidth / 2 - 100, screenHeight / 2 + 50, 200, 50 };
     Rectangle feedButton = { 240, 520, 150, 40 }; // 50 = x, 200 = y, 150 = width, 40 = height
-    Rectangle  cleanButton = { 410, 520, 150, 40 };
+    Rectangle cleanButton = { 410, 520, 150, 40 };
 
     // intilizes the pets needs
     Needs needs;
@@ -40,59 +40,118 @@ int main() {
     float stateTimer = 0.0f;
     const float actionDuration = 1.5f;
 
+    // Animation frame control
+    float frameTimer = 0.0f;
+    const float frameInterval = 0.5f; // 2 frames per second
+    int currentFrame = 0;
+
     // Game Loop
     while (!WindowShouldClose()) {
         float deltaTime = GetFrameTime();
         needsTimer += deltaTime;
         totalElapsedTime += deltaTime;
-        stateTimer += deltaTime;
 
-        int frame = static_cast<int>(totalElapsedTime * 2) % 2; // 2 frames per second
+        // Handle animation frame updates
+        frameTimer += deltaTime;
+        if (frameTimer >= frameInterval) {
+            frameTimer = 0.0f;
+            currentFrame = (currentFrame + 1) % 2; // Toggle between 0 and 1
+        }
+
+        // Handle action state duration
+        if (currentState == EATING || currentState == CLEANING) {
+            stateTimer += deltaTime;
+            if (stateTimer >= actionDuration) {
+                // Return to IDLE when action is complete
+                currentState = IDLE;
+                stateTimer = 0.0f;
+                printf("Action complete, returning to IDLE\n");
+            }
+        }
 
         // time of day logic
         int currentDay = static_cast<int>(totalElapsedTime / fullDayDuration) + 1;
         float timeOfDay = fmod(totalElapsedTime, fullDayDuration);
         int currentHour = getGameHour(timeOfDay, fullDayDuration);
 
-        needs.isSleeping = (currentHour >= 22 || currentHour < 6);
-        if (needs.isSleeping) {
-            currentState = SLEEPING;
+        // Handle sleeping state
+        bool shouldBeSleeping = (currentHour >= 22 || currentHour < 6);
+        needs.isSleeping = shouldBeSleeping;
+
+        // Only change to SLEEPING if we're not in the middle of an action
+        if (shouldBeSleeping && currentState != EATING && currentState != CLEANING) {
+            if (currentState != SLEEPING) {
+                printf("Going to sleep\n");
+                currentState = SLEEPING;
+            }
         }
-        else if (currentState != IDLE && stateTimer >= actionDuration) {
+        else if (!shouldBeSleeping && currentState == SLEEPING) {
+            // Wake up if it's daytime and we were sleeping
+            printf("Waking up\n");
             currentState = IDLE;
-            stateTimer = 0.0f;
         }
 
-        const char* frameStr = getPetFrame(currentState, frame);
+        // Get the correct animation frame
+        const char* frameStr = getPetFrame(currentState, currentFrame);
 
         // Update needs only if game started and interval passed
         if (gameStarted && needsTimer >= updateInterval) {
             UpdateNeeds(needs);
             needsTimer = 0.0f;
-            printf("Hunger: %d\n", needs.hunger);
+            printf("Hunger: %d, Cleanliness: %d\n", needs.hunger, needs.cleanliness);
         }
 
-        // Input handling: start game
-        if (!gameStarted &&
-            CheckCollisionPointRec(GetMousePosition(), startButton) &&
-            IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
-            gameStarted = true;
+        // Input handling
+        if (!gameStarted) {
+            // Start game button
+            if (CheckCollisionPointRec(GetMousePosition(), startButton) &&
+                IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+                gameStarted = true;
+                printf("Game started!\n");
+            }
+
+            // Stop game button
+            if (CheckCollisionPointRec(GetMousePosition(), stopButton) &&
+                IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+                CloseWindow();
+                break;
+            }
+        }
+        else {
+            // Only handle feeding/cleaning if pet is awake and not already in an action
+            if (!needs.isSleeping) {
+                // Feed button
+                if (CheckCollisionPointRec(GetMousePosition(), feedButton) &&
+                    IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+                    if (currentState != EATING && currentState != CLEANING) {
+                        needs.hunger += 10;
+                        if (needs.hunger > 100) needs.hunger = 100;
+                        currentState = EATING;
+                        stateTimer = 0.0f;
+                        printf("Feeding pet, hunger: %d\n", needs.hunger);
+                    }
+                }
+
+                // Clean button
+                if (CheckCollisionPointRec(GetMousePosition(), cleanButton) &&
+                    IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+                    if (currentState != EATING && currentState != CLEANING) {
+                        needs.cleanliness += 10;
+                        if (needs.cleanliness > 100) needs.cleanliness = 100;
+                        currentState = CLEANING;
+                        stateTimer = 0.0f;
+                        printf("Cleaning pet, cleanliness: %d\n", needs.cleanliness);
+                    }
+                }
+            }
         }
 
-        // Input handling: stop game (close window)
-        if (!gameStarted &&
-            CheckCollisionPointRec(GetMousePosition(), stopButton) &&
-            IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
-            CloseWindow();
-            break;
-        }
-
-        // will draw the window with a BG color of white
+        // Rendering
         BeginDrawing();
         ClearBackground(RAYWHITE);
 
-        // will draw the start and stop button when the game hasn't started 
         if (!gameStarted) {
+            // Draw start/stop buttons
             DrawRectangleRec(startButton, LIGHTGRAY);
             DrawText("START", startButton.x + 60, startButton.y + 15, 20, BLACK);
 
@@ -100,44 +159,37 @@ int main() {
             DrawText("STOP", stopButton.x + 60, stopButton.y + 15, 20, BLACK);
         }
         else {
-            // pet animations
-            DrawText(frameStr, 100, 200, 20, BLACK);
+            // Draw pet animation
+            DrawText(frameStr, 350, 200, 20, BLACK);  // Centered the pet display
 
-            // Information: 
-            DrawNeeds(needs); // will draw the pets needs
-            DrawText(needs.isSleeping ? "Zzz..." : "Awake", 50, 140, 20, needs.isSleeping ? DARKBLUE : DARKGREEN); // will draw the pets sleeping stat
-            DrawText(TextFormat("Day %d", currentDay), screenWidth - 100, 20, 20, DARKGRAY); // will draw the days 
-            DrawText("Game Started!", screenWidth / 2 - 80, screenHeight / 2 - 10, 20, DARKGRAY); // placeholder text until we get the pet and its animations
-            DrawRectangleRec(feedButton, LIGHTGRAY); // will draw the feed button < v
+            // Draw UI elements
+            DrawNeeds(needs);
+            DrawText(needs.isSleeping ? "Zzz..." : "Awake", 50, 140, 20, needs.isSleeping ? DARKBLUE : DARKGREEN);
+            DrawText(TextFormat("Day %d", currentDay), screenWidth - 100, 20, 20, DARKGRAY);
+
+            // Debug information
+            DrawText(TextFormat("State: %d (0=IDLE, 1=EATING, 2=CLEANING, 3=SLEEPING)", currentState), 50, 170, 16, DARKGRAY);
+            DrawText(TextFormat("Frame: %d", currentFrame), 50, 190, 16, DARKGRAY);
+            DrawText(TextFormat("Hour: %d", currentHour), 50, 210, 16, DARKGRAY);
+
+            // Draw cleanliness stat
+            DrawText(TextFormat("Cleanliness: %d", needs.cleanliness), 50, 100, 20, DARKGRAY);
+
+            // Draw buttons
+            Color feedButtonColor = (needs.isSleeping || currentState == EATING || currentState == CLEANING) ? GRAY : LIGHTGRAY;
+            Color cleanButtonColor = (needs.isSleeping || currentState == EATING || currentState == CLEANING) ? GRAY : LIGHTGRAY;
+
+            DrawRectangleRec(feedButton, feedButtonColor);
             DrawText("Feed", feedButton.x + 50, feedButton.y + 10, 20, BLACK);
-            DrawRectangleRec(cleanButton, LIGHTGRAY); // will draw the clean button < v
+
+            DrawRectangleRec(cleanButton, cleanButtonColor);
             DrawText("Clean", cleanButton.x + 50, cleanButton.y + 10, 20, BLACK);
-            DrawText(TextFormat("Cleanliness: %d", needs.cleanliness), 50, 100, 20, DARKGRAY); // displays the clenliness stat
-
-            // Buttons:
-            if (CheckCollisionPointRec(GetMousePosition(), feedButton) && // handles the feed button input
-                IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
-                needs.hunger += 10; // increases the hunger stat
-                if (needs.hunger > 100) needs.hunger = 100; // clamp to max
-
-                currentState = EATING;
-                stateTimer = 0.0f;
-            }
-            if (CheckCollisionPointRec(GetMousePosition(), cleanButton) && // handles the clean button input
-                IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
-                needs.cleanliness += 10; // Increase cleanliness
-                if (needs.cleanliness > 100) needs.cleanliness = 100; // Clamp to max
-
-                currentState = CLEANING;
-                stateTimer = 0.0f;
-            }
         }
-        // ends the drawing of the screen
+
         EndDrawing();
     }
-    // closes the window
-    CloseWindow();
 
+    CloseWindow();
     return 0;
 }
 
